@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const Login = () => {
   const [Username, setUsername] = useState("");
   const [Password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // State untuk menyimpan pesan kesalahan
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -17,14 +18,26 @@ const Login = () => {
     // Firebase Authentication: sign in with email and password
     signInWithEmailAndPassword(auth, Username, Password)
       .then((userCredential) => {
-        // Logged in successfully
+        // Login berhasil
         const user = userCredential.user;
         console.log("User logged in:", user);
-        navigate("/dasbor"); // Navigate to the dashboard after successful login
+        setErrorMessage(""); // Reset pesan kesalahan jika login berhasil
+        navigate("/dasbor"); // Navigasi ke dashboard setelah login sukses
       })
       .catch((error) => {
         const errorMessage = error.message;
         console.error("Login failed:", errorMessage);
+
+        // Set pesan kesalahan untuk ditampilkan
+        if (errorMessage.includes("user-not-found")) {
+          setErrorMessage("Pengguna tidak ditemukan.");
+        } else if (errorMessage.includes("wrong-password")) {
+          setErrorMessage("Kata sandi salah.");
+        } else if (errorMessage.includes("invalid-email")) {
+          setErrorMessage("Email tidak valid.");
+        } else {
+          setErrorMessage("Terjadi kesalahan. Silakan coba lagi.");
+        }
       });
   };
 
@@ -45,7 +58,7 @@ const Login = () => {
                     name="email"
                     value={Username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-[50px]"
+                    className="py-2 rounded-[3px] px-2 border-gray-300 border w-full"
                     placeholder="Nama Pengguna"
                   />
                 </div>
@@ -58,11 +71,23 @@ const Login = () => {
                     name="password"
                     value={Password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="py-2 rounded-[3px] px-2 border-gray-300 border w-[366px]"
+                    className="py-2 rounded-[3px] px-2 border-gray-300 border w-full"
                     placeholder="Kata Sandi"
                   />
                 </div>
               </div>
+              {errorMessage && ( // Tampilkan pesan kesalahan jika ada
+                <div className="text-red-500 text-sm mb-4">{errorMessage}</div>
+              )}
+              <p className="text-md text-gray-500">
+                Lupa kata sandi?{" "}
+                <Link
+                  className="text-gray-500 hover:text-blue-500"
+                  to={"/lupa-sandi"}
+                >
+                  Lupa sandi
+                </Link>
+              </p>
               <div className="flex w-full">
                 <button
                   type="submit"

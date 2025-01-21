@@ -20,6 +20,7 @@ import PengaduanNasabahPage from "./Pages/PengaduanNasabahPage";
 import DaftarKreditNasabahPage from "./Pages/DaftarKreditNasabahPage";
 import FormDaftarDepositoAdmin from "./Pages/FormDaftarDepositoAdminPage";
 import FormDaftarDepositoUser from "./Pages/FormDaftarDepositoNasabahPage";
+import LupaSandiPage from "./Pages/LupaSandiPage";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
             path="/nasabah-daftar-kredit"
             element={<DaftarKreditNasabahPage />}
           />
+          <Route path="/lupa-sandi" element={<LupaSandiPage />} />
           <Route path="/ajukan-topup" element={<AjukanTopUpPage />} />
           <Route
             path="/ajukan-topup-nasabah"
